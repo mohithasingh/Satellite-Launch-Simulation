@@ -1,3 +1,6 @@
+Programming Language: Java
+OpenGL (Open Graphics Library) is a cross-platform, open-standard API used for rendering 2D and 3D graphics. It is widely used in game development, computer graphics, simulations, and CAD applications
+
 The project **"SATELLITE LAUNCH SIMULATION"** is developed using **OpenGL** and demonstrates the process of a satellite launch. It features an interactive simulation where different stages of the launch are triggered using specific keyboard inputs.
 
 The application begins with an **introduction page**, displaying the **college name, project title, student names,** and an animated rocket. Pressing **"I"** opens the **instructions page**, which provides details on the key controls for navigating through different stages.
