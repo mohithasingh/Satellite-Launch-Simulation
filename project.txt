@@ -1,0 +1,1000 @@
+#include <windows.h>
+#include <GL/glut.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+GLfloat roct=0.0,dis1=0.0,dis2=0.0,sta=0.0;
+char key2;
+void *currentfont;
+
+float stars[][2]={{-1.0,1.0},{-0.6,1.0},{-0.2,1.0},{0.2,1.0},{0.6,1.0},{1.0,1.0},
+{-0.8,0.6},{-0.4,0.6},{0.0,0.6},{0.4,0.6},{0.8,0.6},
+{-0.9,0.2},{-0.5,0.2},{-0.1,0.2},{0.3,0.2},{0.7,0.2}};
+
+
+void display_string(float x, float y, char *string, int font)
+{
+    int len,i;
+	glColor3f(0.8,0.52,1.0);
+	glRasterPos2f(x, y);
+    len = (int) strlen(string);
+    for (i = 0; i < len; i++)
+    {
+        if(font==1)
+        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,string[i]);
+        if(font==2)
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18,string[i]);
+        if(font==3)
+	        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12,string[i]);
+        if(font==4)
+            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_10,string[i]);
+	}
+
+}
+
+
+void launch_rocket()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    //LAND
+    glColor3f(0.0,0.5,0.0);
+    glBegin(GL_POLYGON);
+    glVertex2f(-1.0,0.0);
+    glVertex2f(1.0,0.0);
+    glVertex2f(1.0,-0.1);
+    glVertex2f(-1.0,-0.1);
+    glEnd();
+    //launch_pad
+    glBegin(GL_QUADS);
+    glColor3f(0.5,0.25,0.05);
+    glVertex2f(-0.15,-0.05);
+    glVertex2f(-0.15,0.15);
+    glVertex2f(0.15,0.15);
+    glVertex2f(0.15,-0.05);
+    glEnd();
+    //launch_control_center
+    glBegin(GL_QUADS);
+    glColor3f(0.2,0.2,0.2);
+    glVertex2f(-0.85,-0.02);
+    glVertex2f(-0.85,0.15);
+    glVertex2f(-0.35,0.15);
+    glVertex2f(-0.35,-0.02);
+    glEnd();
+    //launch_control_center_roof
+    glBegin(GL_POLYGON);
+    glColor3f(0.6,0.0,0.0);
+    glVertex2f(-0.6,0.25);
+    glVertex2f(-0.85,0.15);
+    glVertex2f(-0.35,0.15);
+    glEnd();
+    //launch_control_center_window
+    glBegin(GL_QUADS);
+    glColor3f(0.0,0.0,1.0);
+    glVertex2f(-0.65,-0.02);
+    glVertex2f(-0.65,0.05);
+    glVertex2f(-0.55,0.05);
+    glVertex2f(-0.55,-0.02);
+    glEnd();
+    display_string(-0.83,0.1,"CONTROL CENTER",3); //correct cordinate according to name
+    glTranslatef(0.0,roct,0.0);
+
+    //rocket
+    //middle block
+    glBegin(GL_QUADS);
+    glColor3f(1.0,1.0,1.0);
+    glVertex2f(-0.05,-0.05);
+    glVertex2f(-0.05,0.05);
+    glVertex2f(0.05,0.05);
+    glVertex2f(0.05,-0.05);
+    glEnd();
+    //middle left
+    glBegin(GL_QUADS);
+    glColor3f(0.0,0.0,1.0);
+    glVertex2f(-0.09,-0.05);
+    glVertex2f(-0.09,0.05);
+    glVertex2f(-0.05,0.05);
+    glVertex2f(-0.05,-0.05);
+    glEnd();
+    //middle right
+    glBegin(GL_QUADS);
+    glColor3f(0.0,0.0,1.0);
+    glVertex2f(0.05,-0.05);
+    glVertex2f(0.05,0.05);
+    glVertex2f(0.09,0.05);
+    glVertex2f(0.09,-0.05);
+    glEnd();
+    //below of middle
+    glBegin(GL_QUADS);
+    glColor3f(0.3,0.4,0.5);
+    glVertex2f(-0.05,-0.05);
+    glVertex2f(-0.07,-0.09);
+    glVertex2f(0.07,-0.09);
+    glVertex2f(0.05,-0.05);
+    glEnd();
+    //upper of middle
+    glBegin(GL_QUADS);
+    glColor3f(1.0,0.7,0.3);
+    glVertex2f(-0.05,0.05);
+    glVertex2f(-0.03,0.09);
+    glVertex2f(0.03,0.09);
+    glVertex2f(0.05,0.05);
+    glEnd();
+    //top of middle
+    glBegin(GL_QUADS);
+    glColor3f(0.0,1.0,0.0);
+    glVertex2f(-0.03,0.09);
+    glVertex2f(-0.01,0.1);
+    glVertex2f(0.01,0.1);
+    glVertex2f(0.03,0.09);
+    glEnd();
+    //top of sides(left)
+    glBegin(GL_QUADS);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(-0.09,0.05);
+    glVertex2f(-0.08,0.06);
+    glVertex2f(-0.06,0.06);
+    glVertex2f(-0.05,0.05);
+    glEnd();
+    //top of sides(right)
+    glBegin(GL_QUADS);
+    glVertex2f(0.05,0.05);
+    glVertex2f(0.06,0.06);
+    glVertex2f(0.08,0.06);
+    glVertex2f(0.09,0.05);
+    glEnd();
+    //lower lines(fire)
+    glBegin(GL_LINES);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(-0.05,-0.1);
+    glVertex2f(-0.09,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(0.05,-0.1);
+    glVertex2f(0.09,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(-0.035,-0.1);
+    glVertex2f(-0.06,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(0.035,-0.1);
+    glVertex2f(0.06,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(0.9,0.5,0.0);
+    glVertex2f(-0.02,-0.1);
+    glVertex2f(-0.04,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(0.9,0.5,0.0);
+    glVertex2f(0.02,-0.1);
+    glVertex2f(0.04,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(0.0,-0.1);
+    glVertex2f(0.0,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(-0.01,-0.1);
+    glVertex2f(-0.02,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(0.01,-0.1);
+    glVertex2f(0.02,-0.15);
+    glEnd();
+    roct+=0.001;
+    glFlush();
+}
+
+void star()
+{
+    //stars
+    int i;
+    glPushMatrix();
+    glPointSize(2);
+    glTranslatef(0.0,sta,0.0);
+    glBegin(GL_POINTS);
+    glColor3f(1.0,1.0,1.0);
+    for(i=0;i<16;i++)
+    glVertex2f(stars[i][0],stars[i][1]);
+    sta-=0.001;
+    if(sta<-0.5)sta=0.0;
+    glEnd();
+    glPopMatrix();
+}
+
+void moving_rocket()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    //For stars
+    star();
+    glTranslatef(0.0,0.55,0.0);
+    //rocket
+    //middle block
+    glBegin(GL_QUADS);
+    glColor3f(1.0,1.0,1.0);
+    glVertex2f(-0.05,-0.05);
+    glVertex2f(-0.05,0.05);
+    glVertex2f(0.05,0.05);
+    glVertex2f(0.05,-0.05);
+    glEnd();
+    //upper of middle
+    glBegin(GL_QUADS);
+    glColor3f(1.0,0.7,0.3);
+    glVertex2f(-0.05,0.05);
+    glVertex2f(-0.03,0.09);
+    glVertex2f(0.03,0.09);
+    glVertex2f(0.05,0.05);
+    glEnd();
+    //top of middle
+    glBegin(GL_QUADS);
+    glColor3f(0.0,1.0,0.0);
+    glVertex2f(-0.03,0.09);
+    glVertex2f(-0.01,0.1);
+    glVertex2f(0.01,0.1);
+    glVertex2f(0.03,0.09);
+    glEnd();
+    //middle left
+    glBegin(GL_QUADS);
+    glColor3f(0.0,0.0,1.0);
+    glVertex2f(-0.09,-0.05);
+    glVertex2f(-0.09,0.05);
+    glVertex2f(-0.05,0.05);
+    glVertex2f(-0.05,-0.05);
+    glEnd();
+    //middle right
+    glBegin(GL_QUADS);
+    glColor3f(0.0,0.0,1.0);
+    glVertex2d(0.05,-0.05);
+    glVertex2f(0.05,0.05);
+    glVertex2f(0.09,0.05);
+    glVertex2f(0.09,-0.05);
+    glEnd();
+    //below of middle
+    glBegin(GL_QUADS);
+    glColor3f(0.3,0.4,0.5);
+    glVertex2f(-0.05,-0.05);
+    glVertex2f(-0.07,-0.09);
+    glVertex2f(0.07,-0.09);
+    glVertex2f(0.05,-0.05);
+    glEnd();
+    //top of sides(left)
+    glBegin(GL_QUADS);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(-0.09,0.05);
+    glVertex2f(-0.08,0.06);
+    glVertex2f(-0.06,0.06);
+    glVertex2f(-0.05,0.05);
+    glEnd();
+    //top of sides(right)
+    glBegin(GL_QUADS);
+    glVertex2f(0.05,0.05);
+    glVertex2f(0.06,0.06);
+    glVertex2f(0.08,0.06);
+    glVertex2f(0.09,0.05);
+    glEnd();
+    //lower lines(fire)
+    glBegin(GL_LINES);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(-0.05,-0.1);
+    glVertex2f(-0.09,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(0.05,-0.1);
+    glVertex2f(0.09,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(-0.035,-0.1);
+    glVertex2f(-0.06,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(0.035,-0.1);
+    glVertex2f(0.06,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(0.9,0.5,0.0);
+    glVertex2f(-0.02,-0.1);
+    glVertex2f(-0.04,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(0.9,0.5,0.0);
+    glVertex2f(0.02,-0.1);
+    glVertex2f(0.04,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(0.0,-0.1);
+    glVertex2f(0.0,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(-0.01,-0.1);
+    glVertex2f(-0.02,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(0.01,-0.1);
+    glVertex2f(0.02,-0.15);
+    glEnd();
+    glFlush();
+}
+
+void dismantle1()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    star();
+    glTranslatef(0.0,0.55,0.0);
+    //middle block
+    glBegin(GL_QUADS);
+    glColor3f(1.0,1.0,1.0);
+    glVertex2f(-0.05,-0.05);
+    glVertex2f(-0.05,0.05);
+    glVertex2f(0.05,0.05);
+    glVertex2f(0.05,-0.05);
+    glEnd();
+    //upper of middle
+    glBegin(GL_QUADS);
+    glColor3f(1.0,0.7,0.3);
+    glVertex2f(-0.05,0.05);
+    glVertex2f(-0.03,0.09);
+    glVertex2f(0.03,0.09);
+    glVertex2f(0.05,0.05);
+    glEnd();
+    //top of middle
+    glBegin(GL_QUADS);
+    glColor3f(0.0,1.0,0.0);
+    glVertex2f(-0.03,0.09);
+    glVertex2f(-0.01,0.1);
+    glVertex2f(0.01,0.1);
+    glVertex2f(0.03,0.09);
+    glEnd();
+    //Bring lines below middle of rocket
+    glTranslatef(0.0,0.04,0.0);
+    //lower lines(fire)
+    glBegin(GL_LINES);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(-0.05,-0.1);
+    glVertex2f(-0.09,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(0.05,-0.1);
+    glVertex2f(0.09,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(-0.035,-0.1);
+    glVertex2f(-0.06,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(0.035,-0.1);
+    glVertex2f(0.06,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(0.9,0.5,0.0);
+    glVertex2f(-0.02,-0.1);
+    glVertex2f(-0.04,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(0.9,0.5,0.0);
+    glVertex2f(0.02,-0.1);
+    glVertex2f(0.04,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(0.0,-0.1);
+    glVertex2f(0.0,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(-0.01,-0.1);
+    glVertex2f(-0.02,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(0.01,-0.1);
+    glVertex2f(0.02,-0.15);
+    glEnd();
+    //To drop lower of middle and sides of rocket
+    glTranslatef(0.0,dis1,0.0);
+    //middle left
+    glBegin(GL_QUADS);
+    glColor3f(0.0,0.0,1.0);
+    glVertex2f(-0.09,-0.05);
+    glVertex2f(-0.09,0.05);
+    glVertex2f(-0.05,0.05);
+    glVertex2f(-0.05,-0.05);
+    glEnd();
+    //middle right
+    glBegin(GL_QUADS);
+    glColor3f(0.0,0.0,1.0);
+    glVertex2f(0.05,-0.05);
+    glVertex2f(0.05,0.05);
+    glVertex2f(0.09,0.05);
+    glVertex2f(0.09,-0.05);
+    glEnd();
+    //below of middle
+    glBegin(GL_QUADS);
+    glColor3f(0.3,0.4,0.5);
+    glVertex2f(-0.05,-0.05);
+    glVertex2f(-0.07,-0.09);
+    glVertex2f(0.07,-0.09);
+    glVertex2f(0.05,-0.05);
+    glEnd();
+    //top of sides(left)
+    glBegin(GL_QUADS);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(-0.09,0.05);
+    glVertex2f(-0.08,0.06);
+    glVertex2f(-0.06,0.06);
+    glVertex2f(-0.05,0.05);
+    glEnd();
+    //top of sides(right)
+    glBegin(GL_QUADS);
+    glVertex2f(0.05,0.05);
+    glVertex2f(0.06,0.06);
+    glVertex2f(0.08,0.06);
+    glVertex2f(0.09,0.05);
+    glEnd();
+    dis1-=0.001;
+}
+
+void dismantle2()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    star();
+    glTranslatef(0.0,0.55,0.0);
+    //upper of middle
+    glBegin(GL_QUADS);
+    glColor3f(1.0,0.7,0.3);
+    glVertex2f(-0.05,0.05);
+    glVertex2f(-0.03,0.09);
+    glVertex2f(0.03,0.09);
+    glVertex2f(0.05,0.05);
+    glEnd();
+    //top of middle
+    glBegin(GL_QUADS);
+    glColor3f(0.0,1.0,0.0);
+    glVertex2f(-0.03,0.09);
+    glVertex2f(-0.01,0.1);
+    glVertex2f(0.01,0.1);
+    glVertex2f(0.03,0.09);
+    glEnd();
+    //To drop middle part
+    glTranslatef(0.0,dis2,0.0);
+    //middle block
+    glBegin(GL_QUADS);
+    glColor3f(1.0,1.0,1.0);
+    glVertex2f(-0.05,-0.05);
+    glVertex2f(-0.05,0.05);
+    glVertex2f(0.05,0.05);
+    glVertex2f(0.05,-0.05);
+    glEnd();
+    dis2-=0.001;
+}
+
+void sat_rotn()
+{
+    static GLfloat fEarthRot = 0.0,fSatRot = 0.0;
+    glClear(GL_COLOR_BUFFER_BIT);
+    //To rotate the view(45degree) by x-axis
+    glRotatef(45, 1.0, 0.0, 0.0);
+    //Sun
+    glTranslatef(0.0,0.6,0);
+    glColor3f(1.0,0.5,0.0);
+    /* void glutSolidSphere ( GLdouble radius , GLint slices , GLint stacks );
+    radius: The radius of the sphere.
+    slices: The number of subdivisions around the Z axis (similar to lines of longitude).
+    stacks: The number of subdivisions along the Z axis (similar to lines of latitude).
+    */
+    glutSolidSphere(0.1,50,50);
+    //Earth rotation
+    glRotatef(fEarthRot, 0.0, 1.0, 0.0);
+    fEarthRot += 0.003;
+    if(fEarthRot > 360.0)
+    fEarthRot = 0.0;
+    //Earth
+    glTranslatef(0.5,0.0,0.0);
+    glColor3f(0,0.4,0);
+    glutSolidSphere(0.07,50,50);
+    //Satellite rotation
+    glRotatef(fSatRot,0.0, 1.0, 0.0);
+    glTranslatef(0.2, 0.0, 0.0);
+    fSatRot+= 0.005;
+    if(fSatRot > 360.0)
+    fSatRot = 0.0;
+    //SATELLITE
+    //Antenna
+    glColor3f (1.0, 1.0, 0.0);
+    glBegin(GL_LINES);
+    glVertex2f(0.0,-0.02);
+    glVertex2f(-0.02,-0.07);
+    glVertex2f(0.0,-0.02);
+    glVertex2f(0.02,-0.07);
+    glEnd();
+    //side dish
+    glBegin (GL_QUADS);
+    glColor3f (0.5, 0.5, 0.9);
+    glVertex2f(0.035,-0.02);
+    glColor3f (0.3, 0.4, 0.5);
+    glVertex2f(0.06,-0.02);
+    glColor3f (0.5, 0.7, 0.4);
+    glVertex2f(0.06,0.02);
+    glColor3f (0.8, 0.6, 0.2);
+    glVertex2f(0.035,0.02);
+    glColor3f (0.5, 0.5, 0.9);
+    glVertex2f(-0.035,-0.02);
+    glColor3f (0.3, 0.4, 0.5);
+    glVertex2f(-0.06,-0.02);
+    glColor3f (0.5, 0.7, 0.4);
+    glVertex2f(-0.06,0.02);
+    glColor3f (0.8, 0.6, 0.2);
+    glVertex2f(-0.035,0.02);
+    glEnd();
+    //Middle part
+    glColor3f(0.9,0.22,0.4);
+    glutSolidCube(0.03);
+}
+
+void myinit()
+{
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1.0,1.0,-0.1,1.0);
+    glMatrixMode(GL_MODELVIEW);
+    glutPostRedisplay();
+}
+
+void main_screen2()
+{
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-2.0,2.0,-2.0,2.0);
+    glMatrixMode(GL_MODELVIEW);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glColor3f(139,0,0);
+    int w=0;
+    glRasterPos2f(-0.8,1.3);
+    glColor3f(255,255,0);
+    char option1[]="INSTRUCTIONS:";
+    for(w=0;w<sizeof(option1);w++)
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,option1[w]);
+
+    glRasterPos2f(-0.6,0.8);
+    glColor3f(255,255,0);
+    char option2[]="Press L : To launch the rocket.";
+    for(w=0;w<sizeof(option2);w++)
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,option2[w]);
+
+    glRasterPos2f(-0.6,0.5);
+    glColor3f(255,255,0);
+    char option3[]="Press M : To see the rocket moving.";
+    for(w=0;w<sizeof(option3);w++)
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,option3[w]);
+
+    glRasterPos2f(-0.6,0.2);
+    glColor3f(255,255,0);
+    char option4[]="Press 1 : Dismantle stage 1.";
+    for(w=0;w<sizeof(option4);w++)
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,option4[w]);
+
+    glRasterPos2f(-0.6,-0.1);
+    glColor3f(255,255,0);
+    char option5[]="Press 2 : Dismantle stage 2.";
+    for(w=0;w<sizeof(option5);w++)
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,option5[w]);
+
+    glRasterPos2f(-0.6,-0.4);
+    glColor3f(255,255,0);
+    char option6[]="Press 3 : To see the satelite rotate around earth.";
+    for(w=0;w<sizeof(option6);w++)
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,option6[w]);
+
+    glRasterPos2f(-0.6,-0.7);
+    glColor3f(139,0,0);
+    char option7[]="Press E : Exit";
+    for(w=0;w<sizeof(option7);w++)
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,option7[w]);
+
+    glRasterPos2f(-0.8,-1.2);
+    glColor3f(127,0,255);
+    char option8[]="PRESS S TO START";
+    for(w=0;w<sizeof(option8);w++)
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,option8[w]);
+}
+
+void main_screen()
+{
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-2.0,0.3,-0.25,0.25);
+    glMatrixMode(GL_MODELVIEW);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT);
+    int w=0;
+
+    glColor3f(127,0,255);
+    glRasterPos2f(-1.4,0.2);
+    glColor3f(127,0,255);
+    char line1[]="GOPALAN COLLEGE OF ENGINEERING AND MANAGEMENT";
+    for(w=0;w<sizeof(line1);w++)
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,line1[w]);
+
+    glRasterPos2f(-1.35,0.17);
+    glColor3f(255,255,0);
+    char line2[]="DEPARTMENT OF COMPUTER SCIENCE ENGINEERING";
+    for(w=0;w<sizeof(line2);w++)
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,line2[w]);
+
+    glRasterPos2f(-1.08,0.13);
+    glColor3f(255,255,0);
+    char line3[]="A MINI PROJECT ON";
+    for(w=0;w<sizeof(line3);w++)
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,line3[w]);
+
+    glRasterPos2f(-1.18,0.1);
+    glColor3f(1,0,0);
+    char line4[]="SATELITE LAUNCH SIMULATION";
+    for(w=0;w<sizeof(line4);w++)
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,line4[w]);
+
+    glRasterPos2f(-1.33,0.04);
+    glColor3f(1,1,1);
+    char line5[]="BY:";
+    for(w=0;w<sizeof(line5);w++)
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,line5[w]);
+
+    glRasterPos2f(-1.33,0.01);
+    glColor3f(1,1,1);
+    char line6[]="CHINMAYA K JOSHI                         (1GD18CS014)";
+    for(w=0;w<sizeof(line6);w++)
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,line6[w]);
+
+    glRasterPos2f(-1.33,-0.02);
+    glColor3f(1,1,1);
+    char line7[]="MOHITHA S SINGH                           (1GD18CS029)";
+    for(w=0;w<sizeof(line7);w++)
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,line7[w]);
+
+    glRasterPos2f(-1.33,-0.05);
+    glColor3f(1,0.5,0);
+    char line8[]="SUMAN ADAK                                     (1GD18CS053)";
+    for(w=0;w<sizeof(line8);w++)
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,line8[w]);
+
+    glRasterPos2f(-1.33,-0.11);
+    glColor3f(1,1,1);
+    char line9[]="GUIDED BY:";
+    for(w=0;w<sizeof(line9);w++)
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,line9[w]);
+
+    glRasterPos2f(-1.33,-0.14);
+    glColor3f(0,1,0);
+    char line10[]="Dr. MANJU V";
+    for(w=0;w<sizeof(line10);w++)
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,line10[w]);
+
+    glRasterPos2f(-1.24,-0.2);
+    glColor3f(0,1,1);
+    char line11[]="PRESS I TO SEE THE INSTUCTION PAGE";
+    for(w=0;w<sizeof(line11);w++)
+    glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24,line11[w]);
+
+
+    //rocket
+    //middle block
+    glBegin(GL_QUADS);
+    glColor3f(1.0,1.0,1.0);
+    glVertex2f(-0.05,-0.05);
+    glVertex2f(-0.05,0.05);
+    glVertex2f(0.05,0.05);
+    glVertex2f(0.05,-0.05);
+    glEnd();
+    //middle left
+    glBegin(GL_QUADS);
+    glColor3f(0.0,0.0,1.0);
+    glVertex2f(-0.09,-0.05);
+    glVertex2f(-0.09,0.05);
+    glVertex2f(-0.05,0.05);
+    glVertex2f(-0.05,-0.05);
+    glEnd();
+    //middle right
+    glBegin(GL_QUADS);
+    glColor3f(0.0,0.0,1.0);
+    glVertex2f(0.05,-0.05);
+    glVertex2f(0.05,0.05);
+    glVertex2f(0.09,0.05);
+    glVertex2f(0.09,-0.05);
+    glEnd();
+    //below of middle
+    glBegin(GL_QUADS);
+    glColor3f(0.3,0.4,0.5);
+    glVertex2f(-0.05,-0.05);
+    glVertex2f(-0.07,-0.09);
+    glVertex2f(0.07,-0.09);
+    glVertex2f(0.05,-0.05);
+    glEnd();
+    //upper of middle
+    glBegin(GL_QUADS);
+    glColor3f(1.0,0.7,0.3);
+    glVertex2f(-0.05,0.05);
+    glVertex2f(-0.03,0.09);
+    glVertex2f(0.03,0.09);
+    glVertex2f(0.05,0.05);
+    glEnd();
+    //top of middle
+    glBegin(GL_QUADS);
+    glColor3f(0.0,1.0,0.0);
+    glVertex2f(-0.03,0.09);
+    glVertex2f(-0.01,0.1);
+    glVertex2f(0.01,0.1);
+    glVertex2f(0.03,0.09);
+    glEnd();
+    //top of sides(left)
+    glBegin(GL_QUADS);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(-0.09,0.05);
+    glVertex2f(-0.08,0.06);
+    glVertex2f(-0.06,0.06);
+    glVertex2f(-0.05,0.05);
+    glEnd();
+    //top of sides(right)
+    glBegin(GL_QUADS);
+    glVertex2f(0.05,0.05);
+    glVertex2f(0.06,0.06);
+    glVertex2f(0.08,0.06);
+    glVertex2f(0.09,0.05);
+    glEnd();
+    //lower lines(fire)
+    glBegin(GL_LINES);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(-0.05,-0.1);
+    glVertex2f(-0.09,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(0.05,-0.1);
+    glVertex2f(0.09,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(-0.035,-0.1);
+    glVertex2f(-0.06,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(0.035,-0.1);
+    glVertex2f(0.06,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(0.9,0.5,0.0);
+    glVertex2f(-0.02,-0.1);
+    glVertex2f(-0.04,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(0.9,0.5,0.0);
+    glVertex2f(0.02,-0.1);
+    glVertex2f(0.04,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(0.0,-0.1);
+    glVertex2f(0.0,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(-0.01,-0.1);
+    glVertex2f(-0.02,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(0.01,-0.1);
+    glVertex2f(0.02,-0.15);
+    glEnd();
+    glFlush();
+}
+
+void static_rocket()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    //LAND
+    glColor3f(0.0,0.5,0.0);
+    glBegin(GL_POLYGON);
+    glVertex2f(-1.0,0.0);
+    glVertex2f(1.0,0.0);
+    glVertex2f(1.0,-0.1);
+    glVertex2f(-1.0,-0.1);
+    glEnd();
+    //launch_pad
+    glBegin(GL_QUADS);
+    glColor3f(0.5,0.25,0.05);
+    glVertex2f(-0.15,-0.05);
+    glVertex2f(-0.15,0.15);
+    glVertex2f(0.15,0.15);
+    glVertex2f(0.15,-0.05);
+    glEnd();
+    //launch_control_center
+    glBegin(GL_QUADS);
+    glColor3f(0.2,0.2,0.2);
+    glVertex2f(-0.85,-0.02);
+    glVertex2f(-0.85,0.15);
+    glVertex2f(-0.35,0.15);
+    glVertex2f(-0.35,-0.02);
+    glEnd();
+    //launch_control_center_roof
+    glBegin(GL_POLYGON);
+    glColor3f(0.6,0.0,0.0);
+    glVertex2f(-0.6,0.25);
+    glVertex2f(-0.85,0.15);
+    glVertex2f(-0.35,0.15);
+    glEnd();
+    //launch_control_center_window
+    glBegin(GL_QUADS);
+    glColor3f(0.0,0.0,1.0);
+    glVertex2f(-0.65,-0.02);
+    glVertex2f(-0.65,0.05);
+    glVertex2f(-0.55,0.05);
+    glVertex2f(-0.55,-0.02);
+    glEnd();
+    display_string(-0.83,0.1,"CONTROL CENTER",3); //correct cordinate according to name
+
+    //rocket
+    //middle block
+    glBegin(GL_QUADS);
+    glColor3f(1.0,1.0,1.0);
+    glVertex2f(-0.05,-0.05);
+    glVertex2f(-0.05,0.05);
+    glVertex2f(0.05,0.05);
+    glVertex2f(0.05,-0.05);
+    glEnd();
+    //middle left
+    glBegin(GL_QUADS);
+    glColor3f(0.0,0.0,1.0);
+    glVertex2f(-0.09,-0.05);
+    glVertex2f(-0.09,0.05);
+    glVertex2f(-0.05,0.05);
+    glVertex2f(-0.05,-0.05);
+    glEnd();
+    //middle right
+    glBegin(GL_QUADS);
+    glColor3f(0.0,0.0,1.0);
+    glVertex2f(0.05,-0.05);
+    glVertex2f(0.05,0.05);
+    glVertex2f(0.09,0.05);
+    glVertex2f(0.09,-0.05);
+    glEnd();
+    //below of middle
+    glBegin(GL_QUADS);
+    glColor3f(0.3,0.4,0.5);
+    glVertex2f(-0.05,-0.05);
+    glVertex2f(-0.07,-0.09);
+    glVertex2f(0.07,-0.09);
+    glVertex2f(0.05,-0.05);
+    glEnd();
+    //upper of middle
+    glBegin(GL_QUADS);
+    glColor3f(1.0,0.7,0.3);
+    glVertex2f(-0.05,0.05);
+    glVertex2f(-0.03,0.09);
+    glVertex2f(0.03,0.09);
+    glVertex2f(0.05,0.05);
+    glEnd();
+    //top of middle
+    glBegin(GL_QUADS);
+    glColor3f(0.0,1.0,0.0);
+    glVertex2f(-0.03,0.09);
+    glVertex2f(-0.01,0.1);
+    glVertex2f(0.01,0.1);
+    glVertex2f(0.03,0.09);
+    glEnd();
+    //top of sides(left)
+    glBegin(GL_QUADS);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(-0.09,0.05);
+    glVertex2f(-0.08,0.06);
+    glVertex2f(-0.06,0.06);
+    glVertex2f(-0.05,0.05);
+    glEnd();
+    //top of sides(right)
+    glBegin(GL_QUADS);
+    glVertex2f(0.05,0.05);
+    glVertex2f(0.06,0.06);
+    glVertex2f(0.08,0.06);
+    glVertex2f(0.09,0.05);
+    glEnd();
+    //lower lines(fire)
+    glBegin(GL_LINES);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(-0.05,-0.1);
+    glVertex2f(-0.09,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(0.05,-0.1);
+    glVertex2f(0.09,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(-0.035,-0.1);
+    glVertex2f(-0.06,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(0.035,-0.1);
+    glVertex2f(0.06,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(0.9,0.5,0.0);
+    glVertex2f(-0.02,-0.1);
+    glVertex2f(-0.04,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(0.9,0.5,0.0);
+    glVertex2f(0.02,-0.1);
+    glVertex2f(0.04,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,0.0,0.0);
+    glVertex2f(0.0,-0.1);
+    glVertex2f(0.0,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(-0.01,-0.1);
+    glVertex2f(-0.02,-0.15);
+    glEnd();
+    glBegin(GL_LINES);
+    glColor3f(1.0,1.0,0.0);
+    glVertex2f(0.01,-0.1);
+    glVertex2f(0.02,-0.15);
+    glEnd();
+}
+
+void display()
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+    glLoadIdentity();
+
+    main_screen();
+    myinit();
+    /*----------------calls corresponding function for the key pressed----------------*/
+    if(key2=='i' || key2=='I') main_screen2();
+    if(key2=='s' || key2=='S') static_rocket();
+    if(key2=='l' || key2=='L') launch_rocket();
+    if(key2=='m' || key2=='M') moving_rocket();
+    if(key2=='1') dismantle1();
+    if(key2=='2') dismantle2();
+    if(key2=='3') sat_rotn();
+    if(key2=='e' || key2=='E') exit(0);
+    glutSwapBuffers();
+}
+
+void mykey(unsigned char key,int x,int y)
+{
+    key2=key;
+}
+
+int main(int argc, char **argv)
+{
+    glutInit(&argc,argv);
+    glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGB);
+    glutInitWindowSize(500,600);
+    glutCreateWindow("ROCKET LAUNCHING");
+    glutDisplayFunc(display);
+    glutKeyboardFunc(mykey);
+    myinit();
+    glutMainLoop();
+}
